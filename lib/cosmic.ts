@@ -1,11 +1,16 @@
 import { createBucketClient } from '@cosmicjs/sdk'
-import { CaseStudy, TeamMember, BlogPost, Service, Testimonial, CosmicResponse } from '@/types'
+import { CaseStudy, TeamMember, BlogPost, Service, Testimonial } from '@/types'
 
 export const cosmic = createBucketClient({
   bucketSlug: process.env.COSMIC_BUCKET_SLUG as string,
   readKey: process.env.COSMIC_READ_KEY as string,
   writeKey: process.env.COSMIC_WRITE_KEY as string,
 })
+
+// Type guard to check if error has status property
+function hasStatus(error: unknown): error is { status: number } {
+  return typeof error === 'object' && error !== null && 'status' in error
+}
 
 // Fetch all services
 export async function getServices(): Promise<Service[]> {
@@ -16,8 +21,8 @@ export async function getServices(): Promise<Service[]> {
       .depth(1)
     
     return response.objects as Service[]
-  } catch (error) {
-    if (error.status === 404) {
+  } catch (error: unknown) {
+    if (hasStatus(error) && error.status === 404) {
       return []
     }
     console.error('Error fetching services:', error)
@@ -34,8 +39,8 @@ export async function getService(slug: string): Promise<Service | null> {
       .depth(1)
     
     return response.object as Service
-  } catch (error) {
-    if (error.status === 404) {
+  } catch (error: unknown) {
+    if (hasStatus(error) && error.status === 404) {
       return null
     }
     console.error('Error fetching service:', error)
@@ -52,8 +57,8 @@ export async function getCaseStudies(): Promise<CaseStudy[]> {
       .depth(1)
     
     return response.objects as CaseStudy[]
-  } catch (error) {
-    if (error.status === 404) {
+  } catch (error: unknown) {
+    if (hasStatus(error) && error.status === 404) {
       return []
     }
     console.error('Error fetching case studies:', error)
@@ -70,8 +75,8 @@ export async function getCaseStudy(slug: string): Promise<CaseStudy | null> {
       .depth(1)
     
     return response.object as CaseStudy
-  } catch (error) {
-    if (error.status === 404) {
+  } catch (error: unknown) {
+    if (hasStatus(error) && error.status === 404) {
       return null
     }
     console.error('Error fetching case study:', error)
@@ -88,8 +93,8 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
       .depth(1)
     
     return response.objects as TeamMember[]
-  } catch (error) {
-    if (error.status === 404) {
+  } catch (error: unknown) {
+    if (hasStatus(error) && error.status === 404) {
       return []
     }
     console.error('Error fetching team members:', error)
@@ -106,8 +111,8 @@ export async function getTeamMember(slug: string): Promise<TeamMember | null> {
       .depth(1)
     
     return response.object as TeamMember
-  } catch (error) {
-    if (error.status === 404) {
+  } catch (error: unknown) {
+    if (hasStatus(error) && error.status === 404) {
       return null
     }
     console.error('Error fetching team member:', error)
@@ -124,8 +129,8 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
       .depth(1)
     
     return response.objects as BlogPost[]
-  } catch (error) {
-    if (error.status === 404) {
+  } catch (error: unknown) {
+    if (hasStatus(error) && error.status === 404) {
       return []
     }
     console.error('Error fetching blog posts:', error)
@@ -142,8 +147,8 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
       .depth(1)
     
     return response.object as BlogPost
-  } catch (error) {
-    if (error.status === 404) {
+  } catch (error: unknown) {
+    if (hasStatus(error) && error.status === 404) {
       return null
     }
     console.error('Error fetching blog post:', error)
@@ -160,8 +165,8 @@ export async function getTestimonials(): Promise<Testimonial[]> {
       .depth(1)
     
     return response.objects as Testimonial[]
-  } catch (error) {
-    if (error.status === 404) {
+  } catch (error: unknown) {
+    if (hasStatus(error) && error.status === 404) {
       return []
     }
     console.error('Error fetching testimonials:', error)
@@ -181,8 +186,8 @@ export async function getFeaturedTestimonials(): Promise<Testimonial[]> {
       .depth(1)
     
     return response.objects as Testimonial[]
-  } catch (error) {
-    if (error.status === 404) {
+  } catch (error: unknown) {
+    if (hasStatus(error) && error.status === 404) {
       return []
     }
     console.error('Error fetching featured testimonials:', error)

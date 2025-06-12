@@ -28,11 +28,11 @@ export default function CaseStudiesSection({ caseStudies }: CaseStudiesSectionPr
               key={caseStudy.id}
               className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden"
             >
-              {caseStudy.metadata.featured_image && (
+              {caseStudy.metadata?.featured_image?.imgix_url && (
                 <div className="aspect-video">
                   <img
                     src={`${caseStudy.metadata.featured_image.imgix_url}?w=600&h=300&fit=crop&auto=format,compress`}
-                    alt={caseStudy.metadata.project_title}
+                    alt={caseStudy.metadata?.project_title || 'Case study image'}
                     width={600}
                     height={300}
                     className="w-full h-full object-cover"
@@ -43,9 +43,9 @@ export default function CaseStudiesSection({ caseStudies }: CaseStudiesSectionPr
               <div className="p-8">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-sm font-medium text-primary-600 bg-primary-50 px-3 py-1 rounded-full">
-                    {caseStudy.metadata.related_service?.metadata?.service_name || 'Case Study'}
+                    {caseStudy.metadata?.related_service?.metadata?.service_name || 'Case Study'}
                   </span>
-                  {caseStudy.metadata.project_date && (
+                  {caseStudy.metadata?.project_date && (
                     <span className="text-sm text-gray-500">
                       {new Date(caseStudy.metadata.project_date).getFullYear()}
                     </span>
@@ -53,16 +53,20 @@ export default function CaseStudiesSection({ caseStudies }: CaseStudiesSectionPr
                 </div>
                 
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                  {caseStudy.metadata.project_title}
+                  {caseStudy.metadata?.project_title || 'Untitled Project'}
                 </h3>
                 
-                <p className="text-gray-600 mb-4">
-                  Client: {caseStudy.metadata.client_name}
-                </p>
+                {caseStudy.metadata?.client_name && (
+                  <p className="text-gray-600 mb-4">
+                    Client: {caseStudy.metadata.client_name}
+                  </p>
+                )}
 
-                <p className="text-gray-700 mb-6 line-clamp-3">
-                  {caseStudy.metadata.project_overview}
-                </p>
+                {caseStudy.metadata?.project_overview && (
+                  <p className="text-gray-700 mb-6 line-clamp-3">
+                    {caseStudy.metadata.project_overview}
+                  </p>
+                )}
 
                 <Link
                   href={`/case-studies/${caseStudy.slug}`}

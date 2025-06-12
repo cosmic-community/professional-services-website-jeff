@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-white text-gray-900 antialiased;
+  }
+}
+
+@layer components {
+  .container {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-primary-600 border border-transparent rounded-lg shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3 text-base font-medium text-primary-600 bg-white border border-primary-300 rounded-lg shadow-sm hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200;
+  }
+
+  .section-padding {
+    @apply py-16 lg:py-24;
+  }
+
+  .prose-content {
+    @apply prose prose-lg prose-gray max-w-none;
+  }
+
+  .prose-content h1 {
+    @apply text-3xl font-bold text-gray-900 mb-4;
+  }
+
+  .prose-content h2 {
+    @apply text-2xl font-bold text-gray-900 mb-3 mt-8;
+  }
+
+  .prose-content h3 {
+    @apply text-xl font-semibold text-gray-900 mb-2 mt-6;
+  }
+
+  .prose-content p {
+    @apply mb-4 text-gray-700 leading-relaxed;
+  }
+
+  .prose-content ul {
+    @apply mb-4 space-y-2;
+  }
+
+  .prose-content li {
+    @apply text-gray-700;
+  }
+
+  .prose-content strong {
+    @apply font-semibold text-gray-900;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

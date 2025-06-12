@@ -10,8 +10,8 @@ async function getBlogPosts(): Promise<BlogPost[]> {
       .depth(1)
       .sort('-created_at');
     return response.objects;
-  } catch (error) {
-    if (error.status === 404) {
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'status' in error && (error as any).status === 404) {
       return [];
     }
     throw error;
@@ -43,7 +43,7 @@ export default async function BlogPage() {
                 {post.metadata.featured_image && (
                   <img
                     src={`${post.metadata.featured_image.imgix_url}?w=800&h=600&fit=crop&auto=format,compress`}
-                    alt={post.metadata.featured_image.alt || post.title}
+                    alt={post.title}
                     width="400"
                     height="300"
                     className="w-full h-48 object-cover"
@@ -65,7 +65,7 @@ export default async function BlogPage() {
                   )}
                   <div className="flex items-center justify-between text-sm text-gray-500">
                     {post.metadata.author && (
-                      <span>By {post.metadata.author}</span>
+                      <span>By {typeof post.metadata.author === 'string' ? post.metadata.author : post.metadata.author.title}</span>
                     )}
                     <time dateTime={post.created_at}>
                       {new Date(post.created_at).toLocaleDateString('en-US', {

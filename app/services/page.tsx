@@ -8,8 +8,8 @@ async function getServices(): Promise<Service[]> {
       .props(['title', 'slug', 'metadata'])
       .depth(1);
     return response.objects;
-  } catch (error) {
-    if (error.status === 404) {
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'status' in error && (error as any).status === 404) {
       return [];
     }
     throw error;
@@ -38,10 +38,10 @@ export default async function ServicesPage() {
                 key={service.id}
                 className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow"
               >
-                {service.metadata.icon && (
+                {service.metadata.service_icon && (
                   <img
-                    src={`${service.metadata.icon.imgix_url}?w=120&h=120&fit=crop&auto=format,compress`}
-                    alt={service.metadata.icon.alt || service.title}
+                    src={`${service.metadata.service_icon.imgix_url}?w=120&h=120&fit=crop&auto=format,compress`}
+                    alt={service.title}
                     width="60"
                     height="60"
                     className="w-15 h-15 mb-4"
@@ -51,11 +51,11 @@ export default async function ServicesPage() {
                   {service.title}
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  {service.metadata.description}
+                  {service.metadata.short_description}
                 </p>
-                {service.metadata.features && (
+                {service.metadata.key_features && (
                   <ul className="text-sm text-gray-500 space-y-1">
-                    {service.metadata.features.map((feature: string, index: number) => (
+                    {service.metadata.key_features.map((feature: string, index: number) => (
                       <li key={index} className="flex items-center">
                         <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></span>
                         {feature}

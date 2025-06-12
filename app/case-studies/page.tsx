@@ -10,8 +10,8 @@ async function getCaseStudies(): Promise<CaseStudy[]> {
       .depth(1)
       .sort('-created_at');
     return response.objects;
-  } catch (error) {
-    if (error.status === 404) {
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'status' in error && (error as any).status === 404) {
       return [];
     }
     throw error;
@@ -43,7 +43,7 @@ export default async function CaseStudiesPage() {
                 {caseStudy.metadata.featured_image && (
                   <img
                     src={`${caseStudy.metadata.featured_image.imgix_url}?w=1200&h=800&fit=crop&auto=format,compress`}
-                    alt={caseStudy.metadata.featured_image.alt || caseStudy.title}
+                    alt={caseStudy.title}
                     width="600"
                     height="400"
                     className="w-full h-64 object-cover"
@@ -51,16 +51,14 @@ export default async function CaseStudiesPage() {
                 )}
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-3">
-                    {caseStudy.metadata.client && (
+                    {caseStudy.metadata.client_name && (
                       <span className="text-sm font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">
-                        {caseStudy.metadata.client}
+                        {caseStudy.metadata.client_name}
                       </span>
                     )}
-                    {caseStudy.metadata.industry && (
-                      <span className="text-sm text-gray-500">
-                        {caseStudy.metadata.industry}
-                      </span>
-                    )}
+                    <span className="text-sm text-gray-500">
+                      Case Study
+                    </span>
                   </div>
                   
                   <h2 className="text-xl font-semibold text-gray-900 mb-3">
@@ -72,23 +70,18 @@ export default async function CaseStudiesPage() {
                     </Link>
                   </h2>
                   
-                  {caseStudy.metadata.challenge && (
+                  {caseStudy.metadata.project_overview && (
                     <p className="text-gray-600 mb-4 line-clamp-3">
-                      {caseStudy.metadata.challenge}
+                      {caseStudy.metadata.project_overview}
                     </p>
                   )}
                   
-                  {caseStudy.metadata.results && (
+                  {caseStudy.metadata.results && typeof caseStudy.metadata.results === 'string' && (
                     <div className="mb-4">
                       <h3 className="text-sm font-semibold text-gray-900 mb-2">Key Results:</h3>
-                      <ul className="text-sm text-gray-600 space-y-1">
-                        {caseStudy.metadata.results.slice(0, 3).map((result: string, index: number) => (
-                          <li key={index} className="flex items-center">
-                            <span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></span>
-                            {result}
-                          </li>
-                        ))}
-                      </ul>
+                      <p className="text-sm text-gray-600">
+                        {caseStudy.metadata.results}
+                      </p>
                     </div>
                   )}
                   

@@ -8,8 +8,8 @@ async function getTeamMembers(): Promise<TeamMember[]> {
       .props(['title', 'slug', 'metadata'])
       .depth(1);
     return response.objects;
-  } catch (error) {
-    if (error.status === 404) {
+  } catch (error: unknown) {
+    if (error && typeof error === 'object' && 'status' in error && (error as any).status === 404) {
       return [];
     }
     throw error;
@@ -38,10 +38,10 @@ export default async function TeamPage() {
                 key={member.id}
                 className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
               >
-                {member.metadata.photo && (
+                {member.metadata.profile_photo && (
                   <img
-                    src={`${member.metadata.photo.imgix_url}?w=600&h=600&fit=crop&auto=format,compress`}
-                    alt={member.metadata.photo.alt || member.title}
+                    src={`${member.metadata.profile_photo.imgix_url}?w=600&h=600&fit=crop&auto=format,compress`}
+                    alt={member.title}
                     width="300"
                     height="300"
                     className="w-full h-64 object-cover"
@@ -51,9 +51,9 @@ export default async function TeamPage() {
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     {member.title}
                   </h3>
-                  {member.metadata.position && (
+                  {member.metadata.job_title && (
                     <p className="text-blue-600 font-medium mb-3">
-                      {member.metadata.position}
+                      {member.metadata.job_title}
                     </p>
                   )}
                   {member.metadata.bio && (
@@ -61,28 +61,16 @@ export default async function TeamPage() {
                       {member.metadata.bio}
                     </p>
                   )}
-                  {member.metadata.social_links && (
+                  {member.metadata.linkedin_url && (
                     <div className="flex space-x-3">
-                      {member.metadata.social_links.linkedin && (
-                        <a
-                          href={member.metadata.social_links.linkedin}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:text-blue-800"
-                        >
-                          LinkedIn
-                        </a>
-                      )}
-                      {member.metadata.social_links.twitter && (
-                        <a
-                          href={member.metadata.social_links.twitter}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-400 hover:text-blue-600"
-                        >
-                          Twitter
-                        </a>
-                      )}
+                      <a
+                        href={member.metadata.linkedin_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800"
+                      >
+                        LinkedIn
+                      </a>
                     </div>
                   )}
                 </div>
